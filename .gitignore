@@ -1,0 +1,11 @@
+node_modules/
+src/.vuepress/.cache/
+src/.vuepress/.temp/
+src/.vuepress/dist/
+*.log
+.DS_Store
+# local working dirs (deploy tooling / staging drafts / secrets)
+_deploy/
+_staging/
+.env
+*.env.ps1
