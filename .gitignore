@@ -14,3 +14,7 @@ _staging/
 .env.*.local
 .env.*
 !.env.example
+
+# local credential records (NEVER commit)
+credentials.local.md
+*.local.md
