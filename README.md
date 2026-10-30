@@ -20,6 +20,26 @@ npm run docs:dev      # 本地预览，默认 http://localhost:8080
 npm run docs:build    # 产物在 src/.vuepress/dist
 ```
 
+## 登录（Supabase Auth）
+
+本站使用 **Supabase Auth** 提供邮箱密码、邮箱 Magic Link 与 Google 一键登录。相关环境变量通过
+`.env.local`（本地）和 GitHub Actions Secrets（线上构建）注入，只有 `VITE_` 前缀的变量会被暴露给前端：
+
+```
+VITE_SUPABASE_URL=https://<ref>.supabase.co
+VITE_SUPABASE_ANON_KEY=<anon public key>
+```
+
+本地开发请先 `cp .env.example src/.env.local` 再填入真实值（Vite 以 `src` 为根目录，`.env.local` 必须放在 `src/` 下；该文件不会被提交）。
+完整的 Supabase 建项目、Email/Google Provider、Redirect URL 与部署配置见
+[登录与评论配置指南](docs/auth-and-comments-setup.md)。
+
+## 评论区（Giscus）
+
+文章底部评论区基于 **Giscus + GitHub Discussions**。开启 Discussions、安装 giscus App 后，在
+<https://giscus.app> 生成 `repo / repoId / category / categoryId`，填进 `src/.vuepress/theme.ts` 的
+`plugins.comment` 配置即可（注意必须在 `plugins` 内，放顶层会被忽略）。详细步骤见 [登录与评论配置指南](docs/auth-and-comments-setup.md)。
+
 ## 目录结构
 
 ```

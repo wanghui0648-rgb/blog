@@ -9,3 +9,8 @@ _deploy/
 _staging/
 .env
 *.env.ps1
+# env files (keep .env.example trackable)
+.env.local
+.env.*.local
+.env.*
+!.env.example
