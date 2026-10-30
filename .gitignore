@@ -18,3 +18,33 @@ _staging/
 # local credential records (NEVER commit)
 credentials.local.md
 *.local.md
+
+# --- build output & tool caches ---
+dist/
+.wrangler/
+.vercel/
+
+# --- system / editor files ---
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- private keys & certificates (NEVER commit) ---
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
+
+# --- other secret-bearing files ---
+secrets.json
+*.secret
+service-account*.json
+.npmrc
+!.npmrc.example
