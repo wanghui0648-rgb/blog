@@ -93,3 +93,18 @@ cd _deploy
 ```
 
 > 提示：修改内容后 `git add . && git commit -m "..." && git push`，Actions 会自动上线。
+
+## 管理后台
+
+站长可通过页面**左下角的「🛠 管理」**浮层进入管理后台：点击按钮 → 输入**站长密码** → 进入。
+
+后台包含两块功能：
+
+- **评论管理**：查看所有文章的讨论与评论，支持单条删除和**批量删除**（评论、讨论均可批量）。
+- **内容管理**：浏览 `src/` 下的 Markdown 文件与目录树，支持**新建文件 / 文件夹**、**删除 / 批量删除**文件夹与文件。
+
+注意事项：
+
+- 内容的新建 / 删除会提交到 GitHub `main`，触发 GitHub Actions 自动重建，约 **1–2 分钟**后线上生效，请稍等再刷新查看。
+- 后台后端由 Cloudflare Pages Functions（`functions/` 目录）提供，随部署一起上传；所需密钥 `ADMIN_PASSWORD`、`GITHUB_TOKEN` 在 Cloudflare Pages 项目的环境变量中配置（真实值不入库）。
+- 站长密码请勿外泄；删除评论仅限站长操作（评论作者本人也可在 giscus 气泡菜单或 GitHub Discussions 中自删）。

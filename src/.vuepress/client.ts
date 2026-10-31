@@ -1,5 +1,6 @@
 import { defineClientConfig } from "vuepress/client";
 import LoginLayout from "./layouts/LoginLayout.vue";
+import AdminPanel from "./components/AdminPanel.vue";
 import { initAuth, useAuth } from "./composables/useAuth";
 import { isSupabaseConfigured } from "./supabase";
 
@@ -14,6 +15,12 @@ export default defineClientConfig({
   layouts: {
     LoginLayout,
   },
+
+  /**
+   * 全局根组件：站长管理面板浮层。
+   * 组件内部用 `v-if="ready"` + onMounted 保证 SSR 安全。
+   */
+  rootComponents: [AdminPanel],
 
   /**
    * 路由守卫：
