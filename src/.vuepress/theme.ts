@@ -5,12 +5,14 @@ export default hopeTheme({
   author: {
     name: "Wang Hui",
   },
-  logo: "/logo.svg",
+  logo: "/logo-sketch.svg",
+  darkmode: "disable",
+  // 站点主页实际位于 /home/；访问根路径 / 时会先进入登录页。
+  home: "/home/",
   navbar: [
-    { text: "首页", link: "/" },
+    { text: "首页", link: "/home/" },
     { text: "文章", link: "/posts/" },
     { text: "关于", link: "/about/" },
-    { text: "登录", link: "/login/" },
   ],
   sidebar: "structure",
   markdown: {
@@ -18,6 +20,10 @@ export default hopeTheme({
     codeTabs: true,
   },
   plugins: {
+    // 图标默认使用 Phosphor 图标集（名字里不带前缀时自动补全 ph:）
+    icon: {
+      prefix: "ph:",
+    },
     blog: true,
     // 评论区配置（Giscus）
     // 注意：comment 必须放在 plugins 里，放在顶层会被 theme-hope 静默忽略。
@@ -32,7 +38,9 @@ export default hopeTheme({
       provider: "Giscus",
       repo: "wanghui0648-rgb/blog",
       repoId: "R_kgDOVbeE7g",
-      category: "Announcements",
+      // Announcements 分类仅允许维护者创建 discussion，普通登录用户无法发评论/表情；
+      // 改用 General（与下方 categoryId 对应，且已有的 discussion 就在 General）。
+      category: "General",
       categoryId: "DIC_kwDOVbeE7s4DJ9t-",
       mapping: "pathname",
       strict: false,

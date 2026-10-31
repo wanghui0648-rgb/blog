@@ -1,7 +1,7 @@
 ---
 title: 文章
 index: false
-icon: blog
+icon: notebook
 ---
 
 # 文章

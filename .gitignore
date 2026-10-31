@@ -48,3 +48,6 @@ secrets.json
 service-account*.json
 .npmrc
 !.npmrc.example
+
+# local reference screenshots (not site assets)
+demo img/

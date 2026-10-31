@@ -12,6 +12,8 @@ const loading = ref(false);
 const error = ref<string | null>(null);
 const message = ref<string | null>(null);
 const initialized = ref(false);
+/** 用户是否正通过「忘记密码」邮件链接进入重置密码流程。 */
+const recovery = ref(false);
 
 /** 仅保存一次 onAuthStateChange 订阅，避免重复监听。 */
 let authSubscription: { unsubscribe: () => void } | null = null;
@@ -72,7 +74,9 @@ export function initAuth(): Promise<void> {
     try {
       // 先订阅状态变化，再读取当前会话（避免遗漏初始化期间的登录事件）。
       if (!authSubscription) {
-        const { data } = supabase.auth.onAuthStateChange((_event, newSession) => {
+        const { data } = supabase.auth.onAuthStateChange((event, newSession) => {
+          // 点击「重置密码」邮件里的链接后，Supabase 会触发 PASSWORD_RECOVERY。
+          if (event === "PASSWORD_RECOVERY") recovery.value = true;
           session.value = newSession;
           user.value = newSession?.user ?? null;
         });
@@ -192,6 +196,53 @@ async function signInWithGoogle(): Promise<boolean> {
   }
 }
 
+/** 发送「重置密码」邮件。成功返回 true。 */
+async function resetPassword(email: string): Promise<boolean> {
+  resetFeedback();
+  const supabase = getSupabase();
+  if (!supabase) {
+    error.value = NOT_CONFIGURED;
+    return false;
+  }
+  loading.value = true;
+  try {
+    const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: getLoginRedirectUrl(),
+    });
+    if (authError) throw authError;
+    message.value = "重置密码邮件已寄出，请查收邮箱并点击其中的链接。";
+    return true;
+  } catch (err) {
+    error.value = toFriendlyError(err);
+    return false;
+  } finally {
+    loading.value = false;
+  }
+}
+
+/** 在「重置密码」流程中保存新密码。成功返回 true。 */
+async function updatePassword(newPassword: string): Promise<boolean> {
+  resetFeedback();
+  const supabase = getSupabase();
+  if (!supabase) {
+    error.value = NOT_CONFIGURED;
+    return false;
+  }
+  loading.value = true;
+  try {
+    const { error: authError } = await supabase.auth.updateUser({ password: newPassword });
+    if (authError) throw authError;
+    recovery.value = false;
+    message.value = "新密码已保存，正在跳转…";
+    return true;
+  } catch (err) {
+    error.value = toFriendlyError(err);
+    return false;
+  } finally {
+    loading.value = false;
+  }
+}
+
 /** 退出登录。 */
 async function signOut(): Promise<void> {
   resetFeedback();
@@ -226,6 +277,7 @@ export function useAuth() {
     error,
     message,
     initialized,
+    recovery,
     isAuthenticated,
     // 配置
     isSupabaseConfigured,
@@ -235,6 +287,8 @@ export function useAuth() {
     signUpWithEmail,
     signInWithMagicLink,
     signInWithGoogle,
+    resetPassword,
+    updatePassword,
     signOut,
   };
 }

@@ -1,7 +1,7 @@
 ---
 title: 你好，世界 —— 我的建站记录
 date: 2026-10-29
-icon: blog
+icon: notebook
 category:
   - 随笔
 tag:
